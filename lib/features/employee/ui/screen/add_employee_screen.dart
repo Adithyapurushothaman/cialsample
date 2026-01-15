@@ -234,8 +234,11 @@
 //   );
 // }
 import 'package:cial/core/widget/app_bar.dart';
+import 'package:cial/features/employee/data/enum/employee_submit_status.dart';
 import 'package:cial/features/employee/ui/provider/employee_form_provider.dart';
 import 'package:cial/features/employee/ui/widget/action_button.dart';
+import 'package:cial/features/employee/ui/widget/dialogbox/error.dart';
+import 'package:cial/features/employee/ui/widget/dialogbox/success.dart';
 import 'package:cial/features/employee/ui/widget/upload_document_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -253,6 +256,7 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
   late final TextEditingController _mobileCtrl;
   late final TextEditingController _emailCtrl;
   late final TextEditingController _addressCtrl;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -274,6 +278,14 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
     _emailCtrl.dispose();
     _addressCtrl.dispose();
     super.dispose();
+  }
+
+  void _clearControllers() {
+    _nameCtrl.clear();
+    _aadhaarCtrl.clear();
+    _mobileCtrl.clear();
+    _emailCtrl.clear();
+    _addressCtrl.clear();
   }
 
   @override
@@ -302,11 +314,8 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
                 child: Column(
                   children: [
                     /// Employee Details Card
-                    Card(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                    Form(
+                      key: _formKey,
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(
@@ -466,7 +475,44 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
             /// =======================
             /// STICKY BOTTOM BUTTONS
             /// =======================
-            ActionButtons(onSubmit: notifier.submit),
+            ActionButtons(
+              onCancel: () {
+                notifier.reset();
+                _clearControllers();
+                Navigator.pop(context);
+              },
+              onSubmit: () async {
+                if (!_formKey.currentState!.validate()) return;
+
+                final result = await notifier.submit();
+
+                switch (result) {
+                  case EmployeeSubmitResult.success:
+                    _clearControllers();
+                    await showSuccessDialog(
+                      context,
+                      title: 'Success',
+                      message: 'Added Employee Successfully',
+                    );
+                    break;
+
+                  case EmployeeSubmitResult.validationError:
+                    await showErrorDialog(
+                      context,
+                      'Please fill all required fields',
+                    );
+                    break;
+
+                  case EmployeeSubmitResult.duplicateAadhaar:
+                    await showErrorDialog(context, 'Aadhaar already exists');
+                    break;
+
+                  case EmployeeSubmitResult.failure:
+                    await showErrorDialog(context, 'Something went wrong');
+                    break;
+                }
+              },
+            ),
           ],
         ),
       ),

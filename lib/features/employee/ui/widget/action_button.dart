@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 class ActionButtons extends StatelessWidget {
   final VoidCallback onSubmit;
 
-  const ActionButtons({super.key, required this.onSubmit});
+  const ActionButtons({
+    super.key,
+    required this.onSubmit,
+    required Null Function() onCancel,
+  });
 
   @override
   Widget build(BuildContext context) {

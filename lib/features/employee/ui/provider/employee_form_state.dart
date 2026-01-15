@@ -1,4 +1,3 @@
-// employee_form_state.dart
 class EmployeeFormState {
   final String fullName;
   final String aadhaar;
@@ -20,6 +19,20 @@ class EmployeeFormState {
     this.address = '',
   });
 
+  factory EmployeeFormState.initial() {
+    return const EmployeeFormState();
+  }
+
+  bool get isValid {
+    return fullName.isNotEmpty &&
+        aadhaar.length == 12 &&
+        mobile.length == 10 &&
+        role.isNotEmpty &&
+        passCategory.isNotEmpty &&
+        location.isNotEmpty &&
+        address.isNotEmpty;
+  }
+
   EmployeeFormState copyWith({
     String? fullName,
     String? aadhaar,
@@ -40,21 +53,5 @@ class EmployeeFormState {
       location: location ?? this.location,
       address: address ?? this.address,
     );
-  }
-
-  @override
-  String toString() {
-    return '''
-EmployeeFormState(
-  fullName: $fullName,
-  aadhaar: $aadhaar,
-  mobile: $mobile,
-  email: $email,
-  role: $role,
-  passCategory: $passCategory,
-  location: $location,
-  address: $address
-)
-''';
   }
 }
