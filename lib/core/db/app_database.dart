@@ -36,7 +36,7 @@ class AppDatabase extends _$AppDatabase {
   //           role: const Value('employee'),
   //         ),
   //         UserCompanion(
-  //           email: const Value('krishnakumar@cialinc.com'),
+  //           email: const Value('rajeev@cialinc.com'),
   //           name: const Value('Krishna Kumar'),
   //           role: const Value('manager'),
   //         ),

@@ -1,8 +1,10 @@
+import 'package:cial/core/routing/routes.dart';
 import 'package:cial/core/widget/app_bar.dart';
 import 'package:cial/features/employee/data/employee_data.dart';
 import 'package:cial/features/employee/ui/widget/employee_card.dart';
 import 'package:cial/features/employee/ui/widget/search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class EmployeeDetailsScreen extends StatelessWidget {
   EmployeeDetailsScreen({super.key});
@@ -72,7 +74,11 @@ class EmployeeDetailsScreen extends StatelessWidget {
       appBar: CustomAppBar(
         title: "Employees",
         subtitle: 'View and manage labourers',
-        onMenuTap: () {}, // 👈 pass screen title if supported
+        roleText: 'Contractor Admin',
+        onProfileTap: () {},
+        onLogoutTap: () {
+          context.goNamed(AppRoute.login);
+        },
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

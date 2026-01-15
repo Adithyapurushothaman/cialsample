@@ -130,6 +130,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         height: 48,
                         child: ElevatedButton(
                           onPressed: loginState.isLoading ? null : _onLogin,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(
+                              0xFF4EA5E0,
+                            ), // 👈 button color
+                            disabledBackgroundColor: const Color(0xFF4EA5E0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
                           child: loginState.isLoading
                               ? const CircularProgressIndicator(
                                   strokeWidth: 2,
@@ -137,7 +146,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 )
                               : const Text(
                                   'Login',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
                                 ),
                         ),
                       ),

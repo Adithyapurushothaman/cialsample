@@ -34,8 +34,12 @@ class DashboardContractorScreen extends StatelessWidget {
             title: 'Dashboard',
             subtitle:
                 "Welcome back! Here's what's happening with your contracts.",
-            onMenuTap: () {
-              // open drawer / logout menu
+            roleText: 'Contractor Admin',
+            onProfileTap: () {
+              // Handle profile tap
+            },
+            onLogoutTap: () {
+              context.goNamed(AppRoute.login);
             },
           ),
           Expanded(

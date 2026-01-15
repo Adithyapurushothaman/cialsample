@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String subtitle;
-  final VoidCallback onMenuTap;
+  final String roleText; // 👈 dynamic role
+  final VoidCallback onProfileTap;
+  final VoidCallback onLogoutTap;
 
   const CustomAppBar({
     super.key,
     required this.title,
     required this.subtitle,
-    required this.onMenuTap,
+    required this.roleText,
+    required this.onProfileTap,
+    required this.onLogoutTap,
   });
 
   @override
@@ -25,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// Top Row (Logo + Contractor + Menu)
+            /// Top Row (Logo + Company + Role + Menu)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
@@ -33,23 +37,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Image.asset('assets/image/cial_logo.png', height: 40),
                   const SizedBox(width: 8),
 
-                  /// Contractor Info
+                  /// Company + Role
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'ABC Construction Pvt Ltd',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                         Text(
-                          'Contractor',
+                          roleText,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
@@ -58,9 +62,46 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ),
 
-                  IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: onMenuTap,
+                  /// Menu
+                  PopupMenuButton<_MenuAction>(
+                    icon: const Icon(Icons.more_vert),
+                    color: Colors.white, // 👈 popup background color
+                    onSelected: (value) {
+                      if (value == _MenuAction.profile) {
+                        onProfileTap();
+                      } else {
+                        onLogoutTap();
+                      }
+                    },
+                    itemBuilder: (context) => const [
+                      PopupMenuItem(
+                        value: _MenuAction.profile,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.person_outline,
+                              size: 20,
+                              color: Colors.black, // 👈 icon color for contrast
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              'Profile',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: _MenuAction.logout,
+                        child: Row(
+                          children: [
+                            Icon(Icons.logout, size: 20, color: Colors.red),
+                            SizedBox(width: 8),
+                            Text('Logout', style: TextStyle(color: Colors.red)),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -93,3 +134,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
+
+enum _MenuAction { profile, logout }

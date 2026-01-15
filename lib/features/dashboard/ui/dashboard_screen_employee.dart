@@ -33,8 +33,12 @@ class DashboardScreenEmployee extends StatelessWidget {
             title: 'Dashboard',
             subtitle:
                 "Welcome back! Here's what's happening with your contracts.",
-            onMenuTap: () {
-              // open drawer / logout menu
+            roleText: 'Employee',
+            onProfileTap: () {
+              // Handle profile tap
+            },
+            onLogoutTap: () {
+              context.goNamed(AppRoute.login);
             },
           ),
           Expanded(

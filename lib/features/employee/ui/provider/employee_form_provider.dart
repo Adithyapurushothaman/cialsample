@@ -2,6 +2,8 @@ import 'package:cial/core/db/app_database.dart';
 import 'package:cial/core/provider/app_database_provider.dart';
 import 'package:cial/features/employee/data/dao/employee_dao.dart';
 import 'package:cial/features/employee/data/enum/employee_submit_status.dart';
+import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:drift/drift.dart';
 
@@ -45,6 +47,7 @@ class EmployeeForm extends _$EmployeeForm {
   }
 
   Future<EmployeeSubmitResult> submit() async {
+    // ✅ Validation first (no try/catch)
     if (!state.isValid) {
       return EmployeeSubmitResult.validationError;
     }
@@ -67,7 +70,15 @@ class EmployeeForm extends _$EmployeeForm {
 
       reset();
       return EmployeeSubmitResult.success;
-    } catch (_) {
+    } on SqliteException catch (e) {
+      debugPrint('SQLITE ERROR MESSAGE: ${e.message}');
+      debugPrint('SQLITE ERROR CODE: ${e.extendedResultCode}');
+      // debugPrintStack(stackTrace: st);
+      rethrow;
+      // return EmployeeSubmitResult.failure;
+    } catch (e, st) {
+      debugPrint('EMPLOYEE SUBMIT ERROR: $e');
+      debugPrintStack(stackTrace: st);
       return EmployeeSubmitResult.failure;
     }
   }
