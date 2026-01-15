@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 Future<void> showSuccessDialog(
   BuildContext context, {
@@ -15,18 +16,11 @@ Future<void> showSuccessDialog(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0, end: 1),
-              duration: const Duration(milliseconds: 450),
-              curve: Curves.easeOutBack,
-              builder: (_, value, __) => Transform.scale(
-                scale: value,
-                child: const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 72,
-                ),
-              ),
+            Lottie.asset(
+              'assets/animation/success_animation.json',
+              width: 120,
+              height: 120,
+              repeat: false,
             ),
             const SizedBox(height: 16),
             const Text(
@@ -44,6 +38,10 @@ Future<void> showSuccessDialog(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF4EA5E0), // 👈 button color
+                  disabledBackgroundColor: const Color(0xFF4EA5E0),
+                ),
                 child: const Text("OK"),
               ),
             ),
