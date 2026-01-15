@@ -1,14 +1,13 @@
 import 'package:cial/core/routing/routes.dart';
-import 'package:cial/features/dashboard/widget/app_bar.dart';
-import 'package:cial/features/dashboard/widget/quick_action.dart';
+import 'package:cial/core/widget/app_bar.dart';
+
 import 'package:cial/features/dashboard/widget/stat_card.dart';
 import 'package:cial/features/dashboard/widget/task_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:cial/features/dashboard/widget/activity_tile.dart';
 import 'package:go_router/go_router.dart';
 
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+class DashboardScreenEmployee extends StatelessWidget {
+  const DashboardScreenEmployee({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,28 +43,6 @@ class DashboardScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  StatCard(
-                    bgColor: const Color(0xFFE3F2FD),
-                    iconBg: Colors.blue,
-                    icon: Icons.people,
-                    title: 'Total Employees',
-                    value: '24',
-                    footer: '+5 this month',
-                    footerColor: Colors.green,
-                  ),
-                  const SizedBox(height: 12),
-
-                  StatCard(
-                    bgColor: const Color(0xFFFFF8E1),
-                    iconBg: Colors.orange,
-                    icon: Icons.directions_car,
-                    title: 'Active Vehicle Passes',
-                    value: '8',
-                    footer: '3 pending',
-                    footerColor: Colors.orange,
-                  ),
-                  const SizedBox(height: 12),
-
                   StatCard(
                     bgColor: const Color(0xFFFFF3E0),
                     iconBg: Colors.deepOrange,
@@ -131,41 +108,6 @@ class DashboardScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   const Text(
-                    'Quick Actions',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 12),
-
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 1.2,
-                    children: [
-                      QuickAction(
-                        icon: Icons.person_add,
-                        label: 'Add Employee',
-                        onTap: () {
-                          context.pushNamed(AppRoute.employeeForm);
-                        },
-                      ),
-                      QuickAction(
-                        icon: Icons.track_changes,
-                        label: 'Track Request',
-                      ),
-                      QuickAction(icon: Icons.build, label: 'Tool Entry'),
-                      QuickAction(
-                        icon: Icons.description,
-                        label: 'Material Entry',
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  const Text(
                     'Pending Tasks',
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
@@ -191,34 +133,6 @@ class DashboardScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 20),
-
-                  const Text(
-                    'Recent Activity',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 12),
-
-                  Card(
-                    child: Column(
-                      children: const [
-                        ActivityTile(
-                          title: 'Employee "Rajesh Kumar" clearance approved',
-                          subtitle: '',
-                          time: '2 hours ago',
-                        ),
-                        ActivityTile(
-                          title: 'Vehicle pass pending',
-                          subtitle: 'DL-01-AB-1234',
-                          time: '5 hours ago',
-                        ),
-                        ActivityTile(
-                          title: 'Tool entry request submitted',
-                          subtitle: '',
-                          time: '1 day ago',
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

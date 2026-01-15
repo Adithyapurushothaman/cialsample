@@ -8,6 +8,7 @@ class StatCard extends StatelessWidget {
   final String value;
   final String footer;
   final Color footerColor;
+  final VoidCallback? onTap;
 
   const StatCard({
     required this.bgColor,
@@ -17,6 +18,7 @@ class StatCard extends StatelessWidget {
     required this.value,
     required this.footer,
     required this.footerColor,
+    this.onTap,
   });
 
   @override
@@ -24,42 +26,46 @@ class StatCard extends StatelessWidget {
     return Card(
       color: bgColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              height: 44,
-              width: 44,
-              decoration: BoxDecoration(
-                color: iconBg,
-                borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12), // 👈 ripple follows card shape
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                height: 44,
+                width: 44,
+                decoration: BoxDecoration(
+                  color: iconBg,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: Colors.white),
               ),
-              child: Icon(icon, color: Colors.white),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  footer,
-                  style: TextStyle(fontSize: 11, color: footerColor),
-                ),
-              ],
-            ),
-          ],
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    footer,
+                    style: TextStyle(fontSize: 11, color: footerColor),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -10,11 +10,11 @@ part of 'employee_form_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(EmployeeForm)
-final employeeFormProvider = EmployeeFormProvider._();
+const employeeFormProvider = EmployeeFormProvider._();
 
 final class EmployeeFormProvider
     extends $NotifierProvider<EmployeeForm, EmployeeFormState> {
-  EmployeeFormProvider._()
+  const EmployeeFormProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,6 +48,7 @@ abstract class _$EmployeeForm extends $Notifier<EmployeeFormState> {
   @$mustCallSuper
   @override
   void runBuild() {
+    final created = build();
     final ref = this.ref as $Ref<EmployeeFormState, EmployeeFormState>;
     final element =
         ref.element
@@ -57,6 +58,6 @@ abstract class _$EmployeeForm extends $Notifier<EmployeeFormState> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    element.handleValue(ref, created);
   }
 }
