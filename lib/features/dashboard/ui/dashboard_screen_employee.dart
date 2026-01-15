@@ -48,7 +48,7 @@ class DashboardScreenEmployee extends StatelessWidget {
                     iconBg: Colors.deepOrange,
                     icon: Icons.error_outline,
                     title: 'Pending Clearances',
-                    value: '5',
+                    value: '3',
                     footer: 'Action required',
                     footerColor: Colors.red,
                   ),
@@ -77,7 +77,7 @@ class DashboardScreenEmployee extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: const [
                               Text(
-                                'Contract Status',
+                                '',
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey,

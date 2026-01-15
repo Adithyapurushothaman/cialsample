@@ -44,7 +44,7 @@ class LoginController extends AsyncNotifier<void> {
         context.go('/$AppRoute.employeePanel');
         break;
       default:
-        context.go('/unauthorized');
+        context.go('/$AppRoute.employeePanel');
     }
   }
 }

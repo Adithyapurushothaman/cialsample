@@ -25,7 +25,7 @@ class AppDatabase extends _$AppDatabase {
           UserCompanion(
             email: const Value('admin@abcinc.com'),
             name: const Value('ABC construction'),
-            role: const Value('contractor_master'),
+            role: const Value('admin'),
           ),
           UserCompanion(
             email: const Value('adithya@abcinc.com'),

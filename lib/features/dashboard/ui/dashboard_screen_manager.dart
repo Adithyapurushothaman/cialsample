@@ -49,8 +49,8 @@ class DashboardManagerScreen extends StatelessWidget {
                     iconBg: Colors.blue,
                     icon: Icons.people,
                     title: 'Total Contracts',
-                    value: '24',
-                    footer: '+5 this month',
+                    value: '36',
+                    footer: '+12 this month',
                     footerColor: Colors.green,
                   ),
                   const SizedBox(height: 12),
@@ -77,58 +77,6 @@ class DashboardManagerScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 16),
-
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 26,
-                            backgroundColor: Colors.green.shade100,
-                            child: const Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                              size: 28,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Contract Status',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              Text(
-                                'Active',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                'Valid till Dec 2026',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
 
                   const Text(
                     'Quick Actions',
