@@ -3,6 +3,7 @@ import 'package:cial/features/auth/ui/provider/login_control_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -97,18 +98,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       /// Password
                       TextFormField(
                         controller: passwordController,
-                        obscureText: true,
+                        obscureText: _obscure, // 👈 use state variable
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.lock),
                           labelText: 'Password',
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscure
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                             ),
-                            onPressed: () =>
-                                setState(() => _obscure = !_obscure),
+                            onPressed: () {
+                              setState(() {
+                                _obscure = !_obscure;
+                              });
+                            },
                           ),
                           border: const OutlineInputBorder(),
                         ),
@@ -122,6 +126,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           return null;
                         },
                       ),
+
                       const SizedBox(height: 24),
 
                       /// Login Button
@@ -156,12 +161,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                       const SizedBox(height: 16),
 
-                      Text(
-                        'Need help? Contact airport administration',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                      TextButton(
+                        onPressed: () async {
+                          final uri = Uri.parse(
+                            'https://www.cialinfra.in/Contact-Us',
+                          );
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        },
+                        child: Text(
+                          'Need help? Contact airport administration',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Colors.blue,
+                                // 👈 looks like a link
+                              ),
+                        ),
                       ),
                     ],
                   ),
