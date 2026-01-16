@@ -1,5 +1,7 @@
 abstract class AppRoute {
   static const login = 'login';
+  static const splash = 'splash';
+  static const home = 'home';
   static const dashboard = 'dashboard';
   static const employeeForm = 'employee_form';
   static const employeeList = 'employee_list';

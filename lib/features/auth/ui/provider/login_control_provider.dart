@@ -1,5 +1,6 @@
 import 'package:cial/core/provider/user_dao_provider.dart';
 import 'package:cial/core/routing/routes.dart';
+import 'package:cial/features/auth/ui/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,31 +21,33 @@ class LoginController extends AsyncNotifier<void> {
     state = const AsyncLoading();
 
     final userDao = ref.read(userDaoProvider);
-    final role = await userDao.getUserRoleByEmail(email);
+    final roleFromDb = await userDao.getUserRoleByEmail(email);
 
-    if (role == null) {
+    if (roleFromDb == null) {
       state = AsyncError('User not found', StackTrace.current);
       return;
     }
 
+    final userRole = _mapRole(roleFromDb);
+
+    /// 🔥 SAVE ROLE GLOBALLY
+    ref.read(authProvider.notifier).login(userRole);
+
     state = const AsyncData(null);
 
-    _navigateByRole(role, context);
+    /// 🔥 SINGLE HOME
+    context.go('/$AppRoute.home');
   }
 
-  void _navigateByRole(String role, BuildContext context) {
+  UserRole _mapRole(String role) {
     switch (role) {
       case 'admin':
-        context.go('/$AppRoute.adminPanel');
-        break;
+        return UserRole.contractor;
       case 'manager':
-        context.go('/$AppRoute.managerPanel');
-        break;
+        return UserRole.manager;
       case 'employee':
-        context.go('/$AppRoute.employeePanel');
-        break;
       default:
-        context.go('/$AppRoute.employeePanel');
+        return UserRole.employee;
     }
   }
 }

@@ -1,10 +1,7 @@
-import 'package:cial/core/routing/routes.dart';
-import 'package:cial/core/widget/app_bar.dart';
 import 'package:cial/features/employee/data/employee_data.dart';
 import 'package:cial/features/employee/ui/widget/employee_card.dart';
 import 'package:cial/features/employee/ui/widget/search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class EmployeeDetailsScreen extends StatelessWidget {
   EmployeeDetailsScreen({super.key});
@@ -70,49 +67,57 @@ class EmployeeDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "Employees",
-        subtitle: 'View and manage labourers',
-        roleText: 'Contractor Admin',
-        onProfileTap: () {},
-        onLogoutTap: () {
-          context.goNamed(AppRoute.login);
-        },
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            EmployeeSearchBar(
-              onChanged: (value) {
-                // TODO: search logic
-              },
-              onFilterTap: () {
-                // TODO: filter logic
-              },
-            ),
-            const SizedBox(height: 16),
-            ListView.separated(
-              itemCount: employees.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                return EmployeeCard(
-                  employee: employees[index],
-                  onView: () {},
-                  onEdit: () {},
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            const Text(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Employees",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            "View and manage labourers",
+            style: TextStyle(color: Colors.grey),
+          ),
+
+          const SizedBox(height: 16),
+
+          EmployeeSearchBar(
+            onChanged: (value) {
+              // TODO: search logic
+            },
+            onFilterTap: () {
+              // TODO: filter logic
+            },
+          ),
+
+          const SizedBox(height: 16),
+
+          ListView.separated(
+            itemCount: employees.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              return EmployeeCard(
+                employee: employees[index],
+                onView: () {},
+                onEdit: () {},
+              );
+            },
+          ),
+
+          const SizedBox(height: 16),
+
+          const Center(
+            child: Text(
               "Showing 7 of 24 employees",
               style: TextStyle(color: Colors.grey),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

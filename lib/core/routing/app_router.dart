@@ -5,6 +5,7 @@ import 'package:cial/features/dashboard/ui/dashboard_screen_employee.dart';
 import 'package:cial/features/dashboard/ui/dashboard_screen_manager.dart';
 import 'package:cial/features/employee/ui/screen/add_employee_screen.dart';
 import 'package:cial/features/employee/ui/screen/employee_list_screen.dart';
+import 'package:cial/features/home/ui/screen/home_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -32,6 +33,11 @@ class AppRouter {
           name: AppRoute.login,
           builder: (context, state) => const LoginScreen(),
         ),
+        GoRoute(
+          path: '/$AppRoute.home',
+          builder: (context, state) => const HomeShell(),
+        ),
+
         GoRoute(
           path: '/$AppRoute.adminPanel',
           builder: (context, state) => const DashboardContractorScreen(),

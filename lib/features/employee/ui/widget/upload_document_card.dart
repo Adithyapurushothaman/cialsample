@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 
-class UploadDocumentsCard extends StatelessWidget {
-  // Optional callbacks for each upload
-  final VoidCallback? onUploadId;
-  final VoidCallback? onUploadPoliceClearance;
-  final VoidCallback? onUploadPhoto;
+class UploadDocumentsCard extends StatefulWidget {
+  const UploadDocumentsCard({super.key});
 
-  const UploadDocumentsCard({
-    super.key,
-    this.onUploadId,
-    this.onUploadPoliceClearance,
-    this.onUploadPhoto,
-  });
+  @override
+  State<UploadDocumentsCard> createState() => _UploadDocumentsCardState();
+}
+
+class _UploadDocumentsCardState extends State<UploadDocumentsCard> {
+  String? idFileName;
+  String? policeFileName;
+  String? photoFileName;
+
+  Future<void> _pickFile(Function(String) onSelected) async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
+    );
+
+    if (result != null && result.files.single.name.isNotEmpty) {
+      onSelected(result.files.single.name);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +40,30 @@ class UploadDocumentsCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // ID Proof
             UploadTile(
               title: "Upload ID Proof *",
-              subtitle: "PDF or Image (Max 5MB)",
-              onTap: onUploadId,
+              subtitle: idFileName ?? "PDF or Image (Max 5MB)",
+              isUploaded: idFileName != null,
+              onTap: () =>
+                  _pickFile((name) => setState(() => idFileName = name)),
             ),
             const SizedBox(height: 12),
 
-            // Police Clearance
             UploadTile(
               title: "Upload Police Clearance Certificate *",
-              subtitle: "PDF or Image (Max 5MB)",
-              onTap: onUploadPoliceClearance,
+              subtitle: policeFileName ?? "PDF or Image (Max 5MB)",
+              isUploaded: policeFileName != null,
+              onTap: () =>
+                  _pickFile((name) => setState(() => policeFileName = name)),
             ),
             const SizedBox(height: 12),
 
-            // Employee Photo
             UploadTile(
               title: "Upload Employee Photo *",
-              subtitle: "PDF or Image (Max 5MB)",
-              onTap: onUploadPhoto,
+              subtitle: photoFileName ?? "PDF or Image (Max 5MB)",
+              isUploaded: photoFileName != null,
+              onTap: () =>
+                  _pickFile((name) => setState(() => photoFileName = name)),
             ),
           ],
         ),
@@ -61,13 +75,15 @@ class UploadDocumentsCard extends StatelessWidget {
 class UploadTile extends StatelessWidget {
   final String title;
   final String subtitle;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
+  final bool isUploaded;
 
   const UploadTile({
     super.key,
     required this.title,
     required this.subtitle,
-    this.onTap,
+    required this.onTap,
+    required this.isUploaded,
   });
 
   @override
@@ -75,13 +91,14 @@ class UploadTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300, width: 2),
+        border: Border.all(
+          color: isUploaded ? Colors.green : Colors.grey.shade300,
+          width: 2,
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Title and Subtitle
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,21 +107,36 @@ class UploadTile extends StatelessWidget {
                   title,
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(fontSize: 12, color: Colors.black54),
+                const SizedBox(height: 6),
+
+                Row(
+                  children: [
+                    Icon(
+                      isUploaded ? Icons.insert_drive_file : Icons.info_outline,
+                      size: 16,
+                      color: isUploaded ? Colors.green : Colors.black54,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        subtitle,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isUploaded ? Colors.green : Colors.black54,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
 
-          // Upload Button
           ElevatedButton.icon(
-            onPressed: onTap ?? () {},
+            onPressed: onTap,
             icon: const Icon(Icons.upload, size: 16),
-            label: const Text("Upload"),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+            label: Text(isUploaded ? "Change" : "Upload"),
           ),
         ],
       ),

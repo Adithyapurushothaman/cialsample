@@ -1,5 +1,3 @@
-import 'package:cial/core/routing/routes.dart';
-import 'package:cial/core/widget/app_bar.dart';
 import 'package:cial/features/employee/data/enum/employee_submit_status.dart';
 import 'package:cial/features/employee/ui/provider/employee_form_provider.dart';
 import 'package:cial/features/employee/ui/widget/action_button.dart';
@@ -8,7 +6,6 @@ import 'package:cial/features/employee/ui/widget/dialogbox/success.dart';
 import 'package:cial/features/employee/ui/widget/upload_document_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class AddEmployeeScreen extends ConsumerStatefulWidget {
   const AddEmployeeScreen({super.key});
@@ -62,15 +59,6 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
     final notifier = ref.read(employeeFormProvider.notifier);
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Add Employee',
-        subtitle: 'Register a new employee by filling the details below.',
-        roleText: "Contractor Admin",
-        onProfileTap: () {},
-        onLogoutTap: () {
-          context.goNamed(AppRoute.login);
-        },
-      ),
       backgroundColor: const Color(0xFFF5F6FA),
       body: SafeArea(
         child: Column(
@@ -85,7 +73,10 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
                     children: [
                       const Text(
                         "Employee Details",
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
                       ),
                       const SizedBox(height: 16),
 
@@ -227,11 +218,7 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
                       ),
 
                       const SizedBox(height: 16),
-                      UploadDocumentsCard(
-                        onUploadId: () {},
-                        onUploadPoliceClearance: () {},
-                        onUploadPhoto: () {},
-                      ),
+                      const UploadDocumentsCard(),
                     ],
                   ),
                 ),
@@ -249,7 +236,6 @@ class _AddEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
                 if (!isValid) return;
 
                 final result = await notifier.submit();
-
                 if (!mounted) return;
 
                 switch (result) {
