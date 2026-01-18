@@ -1,14 +1,23 @@
 import 'package:cial/core/routing/routes.dart';
+import 'package:cial/features/dashboard/ui/tab_index_provider.dart';
 import 'package:cial/features/dashboard/widget/quick_action.dart';
 import 'package:cial/features/dashboard/widget/stat_card.dart';
 import 'package:cial/features/dashboard/widget/task_tile.dart';
 import 'package:cial/features/dashboard/widget/activity_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class DashboardContractorScreen extends StatelessWidget {
+class DashboardContractorScreen extends ConsumerStatefulWidget {
   const DashboardContractorScreen({super.key});
 
+  @override
+  ConsumerState<DashboardContractorScreen> createState() =>
+      _DashboardContractorScreenState();
+}
+
+class _DashboardContractorScreenState
+    extends ConsumerState<DashboardContractorScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -25,7 +34,7 @@ class DashboardContractorScreen extends StatelessWidget {
             footer: '+5 this month',
             footerColor: Colors.green,
             onTap: () {
-              context.pushNamed(AppRoute.employeeList);
+              ref.read(homeTabIndexProvider.notifier).state = 1;
             },
           ),
           const SizedBox(height: 12),
@@ -117,7 +126,7 @@ class DashboardContractorScreen extends StatelessWidget {
                 icon: Icons.person_add,
                 label: 'Add Employee',
                 onTap: () {
-                  context.pushNamed(AppRoute.employeeForm);
+                  ref.read(homeTabIndexProvider.notifier).state = 2;
                 },
               ),
               const QuickAction(

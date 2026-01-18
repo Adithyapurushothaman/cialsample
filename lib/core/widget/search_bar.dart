@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
-class EmployeeSearchBar extends StatelessWidget {
+class CustomSearchBar extends StatelessWidget {
   final TextEditingController controller;
+  final String hintText;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onFilterTap;
+  final IconData prefixIcon;
 
-  const EmployeeSearchBar({
+  const CustomSearchBar({
     super.key,
     required this.controller,
+    required this.hintText,
     this.onChanged,
     this.onFilterTap,
+    this.prefixIcon = Icons.search,
   });
 
   @override
@@ -23,8 +27,8 @@ class EmployeeSearchBar extends StatelessWidget {
               controller: controller,
               onChanged: onChanged,
               decoration: InputDecoration(
-                hintText: "Search employees...",
-                prefixIcon: const Icon(Icons.search),
+                hintText: hintText,
+                prefixIcon: Icon(prefixIcon),
                 contentPadding: const EdgeInsets.symmetric(vertical: 14),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -32,21 +36,24 @@ class EmployeeSearchBar extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          SizedBox(
-            height: 48,
-            width: 48,
-            child: OutlinedButton(
-              onPressed: onFilterTap,
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+
+          if (onFilterTap != null) ...[
+            const SizedBox(width: 8),
+            SizedBox(
+              height: 48,
+              width: 48,
+              child: OutlinedButton(
+                onPressed: onFilterTap,
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
+                child: const Icon(Icons.filter_list),
               ),
-              child: const Icon(Icons.filter_list),
             ),
-          ),
+          ],
         ],
       ),
     );

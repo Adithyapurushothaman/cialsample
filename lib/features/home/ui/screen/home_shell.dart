@@ -1,11 +1,16 @@
 import 'package:cial/core/routing/routes.dart';
 import 'package:cial/core/widget/app_bar.dart';
 import 'package:cial/features/auth/ui/provider/auth_provider.dart';
+import 'package:cial/features/contracte/ui/screens/add_contractee.dart';
+import 'package:cial/features/contracte/ui/screens/contractee_details_screen.dart';
 import 'package:cial/features/dashboard/ui/dashboard_screen_contractor.dart';
 import 'package:cial/features/dashboard/ui/dashboard_screen_employee.dart';
 import 'package:cial/features/dashboard/ui/dashboard_screen_manager.dart';
+import 'package:cial/features/dashboard/ui/tab_index_provider.dart';
 import 'package:cial/features/employee/ui/screen/add_employee_screen.dart';
 import 'package:cial/features/employee/ui/screen/employee_list_screen.dart';
+import 'package:cial/features/task/ui/screens/add_task_screen.dart';
+import 'package:cial/features/task/ui/screens/task_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,77 +43,48 @@ class HomeShell extends ConsumerStatefulWidget {
 }
 
 class _HomeShellState extends ConsumerState<HomeShell> {
-  int _currentIndex = 0;
-
-  /// 🔙 Back button handling for tabs
-  Future<bool> _onWillPop() async {
-    if (_currentIndex > 0) {
-      setState(() {
-        _currentIndex--;
-      });
-      return false; // do NOT pop route
-    }
-    return true; // exit app
-  }
-
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final role = authState.role;
+    final currentIndex = ref.watch(homeTabIndexProvider);
 
-    if (role == null) {
-      return const SizedBox.shrink();
-    }
+    final tabs = _tabsForRole(role!);
 
-    final tabs = _tabsForRole(role);
+    return Scaffold(
+      body: Column(
+        children: [
+          CustomAppBar(
+            title: tabs[currentIndex].label,
+            subtitle: tabs[currentIndex].subtitle,
+            roleText: _roleText(role),
+            onProfileTap: () {},
+            onLogoutTap: () {
+              context.goNamed(AppRoute.login);
+            },
+          ),
 
-    // 🛡 Safety: reset index if role/tab count changes
-    if (_currentIndex >= tabs.length) {
-      _currentIndex = 0;
-    }
-
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        drawer: _buildDrawer(context),
-
-        body: Column(
-          children: [
-            CustomAppBar(
-              title: tabs[_currentIndex].label,
-              subtitle: tabs[_currentIndex].subtitle, // ✅ dynamic
-              roleText: _roleText(role),
-              onProfileTap: () {},
-              onLogoutTap: () {
-                context.goNamed(AppRoute.login);
-              },
+          Expanded(
+            child: IndexedStack(
+              index: currentIndex,
+              children: tabs.map((e) => e.screen).toList(),
             ),
-
-            Expanded(
-              child: IndexedStack(
-                index: _currentIndex,
-                children: tabs.map((e) => e.screen).toList(),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) {
+          ref.read(homeTabIndexProvider.notifier).state = index;
+        },
+        items: tabs
+            .map(
+              (tab) => BottomNavigationBarItem(
+                icon: Icon(tab.icon),
+                label: tab.label,
               ),
-            ),
-          ],
-        ),
-
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: tabs
-              .map(
-                (tab) => BottomNavigationBarItem(
-                  icon: Icon(tab.icon),
-                  label: tab.label,
-                ),
-              )
-              .toList(),
-        ),
+            )
+            .toList(),
       ),
     );
   }
@@ -160,8 +136,14 @@ List<RoleTab> _tabsForRole(UserRole role) {
         RoleTab(
           label: 'Tasks',
           icon: Icons.task,
-          screen: EmployeeDetailsScreen(),
-          subtitle: 'View and manage labourers',
+          screen: TaskDetailsScreen(),
+          subtitle: 'View and manage tasks',
+        ),
+        const RoleTab(
+          label: 'Add Task',
+          icon: Icons.add,
+          screen: AddTaskScreen(),
+          subtitle: 'Add a new task',
         ),
       ];
 
@@ -176,14 +158,14 @@ List<RoleTab> _tabsForRole(UserRole role) {
         RoleTab(
           label: 'Contractors',
           icon: Icons.business,
-          screen: EmployeeDetailsScreen(),
-          subtitle: 'View and manage labourers',
+          screen: ContracteeDetailsScreen(),
+          subtitle: 'View and manage Contractors',
         ),
         const RoleTab(
           label: 'Add Contractor',
           icon: Icons.add,
-          screen: AddEmployeeScreen(),
-          subtitle: 'Add a new labourer',
+          screen: AddContracteeScreen(),
+          subtitle: 'Add a new Contractor',
         ),
       ];
 
