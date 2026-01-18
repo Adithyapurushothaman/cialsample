@@ -1,5 +1,6 @@
 import 'package:cial/core/routing/routes.dart';
 import 'package:cial/features/auth/ui/provider/login_control_provider.dart';
+import 'package:cial/features/employee/ui/widget/dialogbox/error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +18,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final emailFocusNode = FocusNode();
+
   var _obscure = true;
 
   @override
@@ -41,6 +44,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final loginState = ref.watch(loginControllerProvider);
+
+    ref.listen<AsyncValue<void>>(loginControllerProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) async {
+          await showErrorDialog(context, error.toString());
+          emailController.clear();
+          passwordController.clear();
+          FocusScope.of(context).requestFocus(emailFocusNode);
+        },
+      );
+    });
 
     return Scaffold(
       body: Container(
@@ -77,6 +91,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       /// Email
                       TextFormField(
                         controller: emailController,
+                        focusNode: emailFocusNode,
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
                           labelText: 'Email',
